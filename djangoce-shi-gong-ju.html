@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Django测试工具 - 肉包子打狗</title>
+        <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+	<link rel="bookmark" type="image/x-icon" href="/bookmark.png">
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css" type="text/css" />
+        <link rel="stylesheet" href="/theme/font-icons/style.min.css" type="text/css" />
+        <link rel="stylesheet" href="/theme/css/niu2.min.css" type="text/css" />
+        <link rel="canonical" href="/djangoce-shi-gong-ju.html" />
+        <script type="text/javascript">window.onload=function(){};</script>
+        <!--[if lt IE 9]>
+            <script src="/theme/js/html5shiv.js"></script>
+            <script src="/theme/js/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body> 
+        <div id="body-header">
+            <div class="navbar navbar-default navbar-fixed-top">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" style="padding-left:0" href="/">
+                            <i class="icon-home"></i>肉包子打狗
+                        </a>
+                    </div>
+                    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+                        <ul class="nav navbar-nav">
+                            <li><a href="/about.html" target="_blank" title="about">
+                                <i class="icon-evil"></i>关于我</a>
+                            </li>
+                            <li><a href="/archives.html" title="archives">
+                                <i class="icon-drawer"></i>全部</a>
+                            </li>
+                            <li><a href="/tags.html" title="tags">
+                                <i class="icon-price-tags"></i>标签</a>
+                            </li>
+                        <!-- category dropdown list -->
+                        <li class="dropdown">
+                           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="icon-folder-open"></i>分类<b class="caret"></b>
+                           </a>
+                           <ul class="dropdown-menu">
+                               <li><a href="/category/du-shu-bi-ji.html">
+                                   <i class="icon-folder-close"></i>读书笔记
+                                      (1)</a></li>
+                               <li><a href="/category/fan-yi.html">
+                                   <i class="icon-folder-close"></i>翻译
+                                      (3)</a></li>
+                               <li><a href="/category/webbackend.html">
+                                   <i class="icon-folder-close"></i>WebBackend
+                                      (1)</a></li>
+                           </ul>
+                        </li>
+                        <!--  self defined dropdown list -->
+                        </ul>
+                        
+                        <!-- right nav bar -->
+                        <ul class="nav navbar-nav navbar-right">
+                        <!-- google custom search -->
+                        <li>
+                        <div id="niu2-cse-wrapper">
+                            <div id="niu2-cse-header-box" class="navbar-form navbar-nav">
+                                <form action="http://google.com/cse">
+                                    <input type="hidden" name="cx" value="014853485295879752298:gff7fwfc9r4" />
+                                    <input type="hidden" name="ie" value="UTF-8" />
+                                    <div class="form-group">
+                                        <input id="niu2-cse-search-input" class="niu2-cse-header form-control" 
+                                            type="text" name="q" 
+                                            placeholder="回车一下，开始搜索"/>
+                                    </div>
+                                </form>
+                           </div>
+                           <div id="niu2-cse-ctrl-box" class="navbar-nav">
+                            <i id="niu2-cse-search-image" class="icon-search navbar-nav"></i><span id="niu2-cse-search-text">Google站内搜索</span>
+                           </div>
+                       </div>
+                       </li>
+                       </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <div id="body-content">
+            <div class="col-md-8 col-md-offset-2">
+                <h1 id="content-heading">Django测试工具</h1>
+            </div>
+            <div id="niu2-left-container" class="col-md-6 col-md-offset-2 with-right-border">
+                <div id="niu2-main-content">
+                    <html><head></head><body><hr/>
+<ul>
+<li>翻译人：徐维涛</li>
+<li>翻译周期：2016-03-20~2016-03-21</li>
+<li>中文译名：Django中的测试工具</li>
+<li>原标题和链接：<a href="https://docs.djangoproject.com/en/1.9/topics/testing/tools/">Testing tools</a></li>
+<li>说明：<code>Django1.9</code>官方文档翻译，为保证翻译后语义通顺便于理解，在不影响把握原文所表中心的前提下，部分原文语句有省略、补充。翻译本文纯属兴趣爱好，不敢保证与原文所表100%一致，但必字句斟酌。能力有限，如有异译或觉不妥，欢迎交流。误导必致歉，查错必纠正。</li>
+<li>版权声明：未经本人许可，禁止转载发布</li>
+</ul>
+<hr/>
+<p>当你编写测试时，<code>Django</code>提供一系列“开箱即用”的工具来供你调用。</p>
+<h2 id="">测试客户端</h2>
+<p>测试客户端是一个模拟浏览器的<code>Python</code>类，它可以辅助你测试你的视图函数，并且可以和你的<code>Django</code>应用进行交互。</p>
+<p>通过测试客户端，你可以做到以下这些事：</p>
+<ul>
+<li>模拟某个<code>URL</code>的<code>GET</code>和<code>POST</code>请求，然后来观察响应，响应中包括从底层<code>HTTP</code>(响应头和状态码)到页面内容的所有内容。</li>
+<li>浏览重定向链(如果存在的话)来核对<code>URL</code>和重定向链每一步的状态码。</li>
+<li>测试一个给定的由<code>Django</code>模板来渲染的，包含模板上下文和某些变量值的请求。</li>
+</ul>
+<p>测试客户端并不打算成为<a href="http://seleniumhq.org/"><strong>Selenium</strong></a>或者其他浏览器模拟框架的替代品。<code>Django</code>的测试客户端与这些浏览器模拟框架有不一样的侧重点。简短来说：</p>
+<ul>
+<li><code>Django</code>测试客户端侧重来测试被渲染的模板是否正确以及模板是否被传递了正确的模板上下文数据。</li>
+<li>类似<a href="http://seleniumhq.org/"><strong>Selenium</strong></a>的浏览器模拟框架侧重于测试已经被渲染的<code>HTML</code>和网页的一些行为（也就是<code>JavaScript</code>的一些功能函数）。<code>Django</code>也为这些框架提供了专门的支持，更多详细信息可以查看<a href="https://docs.djangoproject.com/en/1.9/topics/testing/tools/#django.test.LiveServerTestCase"><code>LiveServerTestCase</code></a>章节。</li>
+</ul>
+<p>一个全面的测试套件应当综合使用这两种测试类型。</p>
+<h3 id="_1">概述和一个简单的小例子</h3>
+<p>如果要使用测试客户端，实例化<code>django.test.Client</code>来获取网页：</p>
+<div class="codehilite"><pre><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">Client</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">response</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">'/login/'</span><span class="p">,</span> <span class="p">{</span><span class="s">'username'</span><span class="p">:</span> <span class="s">'john'</span><span class="p">,</span> <span class="s">'password'</span><span class="p">:</span> <span class="s">'smith'</span><span class="p">})</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span>
+<span class="mi">200</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">response</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'/customer/details/'</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span>
+<span class="n">b</span><span class="s">'&lt;!DOCTYPE html...'</span>
+</pre></div>
+
+
+<p>正如这个例子展示的，你可以从<code>Python</code>的交互式解释器中来实例化一个<code>Client</code>。</p>
+<p>那么测试客户端如何工作呢，了解这些很重要：</p>
+<ul>
+<li>
+<p>测试客户端并不需要事先让<code>Web</code>服务器跑起来。事实上，它完全脱离于<code>Web</code>服务器执行并且执行的很好。这是因为它避免了<code>HTTP</code>的开销直接与<code>Django</code>框架交互。这让单元测试执行的很快。</p>
+</li>
+<li>
+<p>当请求网页的时候，只需要指出网页的相对<code>URL</code>路径而不需要整个域名。例如，这样是正确的：</p>
+</li>
+</ul>
+<div class="codehilite"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'/login/'</span><span class="p">)</span>
+</pre></div>
+
+
+<p>不正确的：</p>
+<div class="codehilite"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'https://www.example.com/login/'</span><span class="p">)</span>
+</pre></div>
+
+
+<p>测试客户端不能直接访问你的<code>Django</code>项目之外的网页。如果你需要访问项目之外的网页，使用<code>Python</code>标准库，比如<a href="https://docs.python.org/3/library/urllib.html#module-urllib"><code>urllib</code></a>。</p>
+<ul>
+<li>测试客户端根据配置文件中<a href="https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-ROOT_URLCONF"><code>ROOT_URLCONF</code></a>指定的<code>URLconf</code>来解析<code>URL</code>。 </li>
+<li>尽管上边的例子能够在<code>Python</code>交互解释器中执行，但是有一些测试客户端的功能函数，尤其是模板相关的功能函数，只有在测试运行的时候是可以调用执行。</li>
+</ul>
+<p>这样的原因是<code>Django</code>的测试<code>runner</code>执行了一点黑魔法来决定给定的视图会加载哪个模板。而这个黑魔法（其实就是内存中<code>Django</code>模板系统）只在测试<code>runner</code>跑的时候被执行。</p>
+<ul>
+<li>默认的测试客户端将关闭所有对你站点上的<code>CSRF</code>的检查。</li>
+</ul>
+<p>如果你想要你的测试客户端去执行<code>CSRF</code>检查，你可以在实例化测试客户端的时候传递<code>enforce_csrf_checks</code>参数：</p>
+<div class="codehilite"><pre><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">Client</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">csrf_client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">enforce_csrf_checks</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+
+
+<hr/>
+<h3 id="_1_2">发起请求</h3>
+<p>使用<code>django.test.Client</code>类来发起请求。</p>
+<p><code>class Client(enforce_csrf_checks=False, **defaults)</code><a href="https://docs.djangoproject.com/en/1.9/_modules/django/test/client/#Client">[source]</a></p>
+<p>实例化的时候这个类不需要任何参数，但是你可以通过传递参数来指定一些默认的报文头，比如，下面这样写可以在每个<code>HTTP</code>请求头上加上一个<code>User-Agent</code>：</p>
+<div class="codehilite"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">HTTP_USER_AGENT</span><span class="o">=</span><span class="s">'Mozilla/5.0'</span><span class="p">)</span>
+</pre></div>
+
+
+<p>有一些在<code>Client</code>的<a href="https://docs.djangoproject.com/en/1.9/topics/testing/tools/#django.test.Client.get"><code>get()</code></a>或者<a href="https://docs.djangoproject.com/en/1.9/topics/testing/tools/#django.test.Client.post"><code>post()</code></a>方法中传递的参数优先于(会覆盖掉)在实例化<code>Client</code>时传递的相同概念的参数。<code>enforce_csrf_checks</code>参数可以被用于测试<code>CSRF</code>保护（见上）。</p>
+<p>一旦你实例化了<code>Client</code>，你就可以调用以下的方法：</p>
+<h4 id="getpath-datanone-followfalse-securefalse-extrasource"><code>get(path, data=None, follow=False, secure=False, **extra)</code><a href="https://docs.djangoproject.com/en/1.9/_modules/django/test/client/#Client.get">[source]</a></h4>
+<p>发起一个指定<strong>path</strong>的请求，然后返回一个<strong>Response</strong>对象。响应对象在下方会有详细文档。</p>
+<p><strong>data</strong>参数传递的键值对可以被用来创建一个有数据的<code>GET</code>请求。比如：</p>
+<div class="codehilite"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'/customers/details/'</span><span class="p">,</span> <span class="p">{</span><span class="s">'name'</span><span class="p">:</span> <span class="s">'fred'</span><span class="p">,</span> <span class="s">'age'</span><span class="p">:</span> <span class="mi">7</span><span class="p">})</span>
+</pre></div>
+
+
+<p>这样发起的<code>GET</code>请求就等价于</p>
+<div class="codehilite"><pre>/customers/details/?name=fred&amp;age=7
+</pre></div>
+
+
+<p><strong>extra</strong>参数可以被用于指定请求头的信息。比如：</p>
+<div class="codehilite"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'/customers/details/'</span><span class="p">,</span> <span class="p">{</span><span class="s">'name'</span><span class="p">:</span> <span class="s">'fred'</span><span class="p">,</span> <span class="s">'age'</span><span class="p">:</span> <span class="mi">7</span><span class="p">},</span>
+<span class="o">...</span>       <span class="n">HTTP_X_REQUESTED_WITH</span><span class="o">=</span><span class="s">'XMLHttpRequest'</span><span class="p">)</span>
+</pre></div>
+
+
+<p>这样将发送一个带有<code>HTTP_X_REQUESTED_WITH</code>请求头的请求，这对于使用<code>django.http.HttpRequest.is_ajax()</code>方法的测试来说有好处。</p>
+<blockquote>
+<p><strong>CGI标准</strong></p>
+<p>通过<strong>**extra</strong>传递的报文头参数应该遵循<a href="https://www.w3.org/CGI/"><code>CGI</code></a>的标准。例如，模拟一个从浏览器发送到服务器，但是<code>Host</code>报文头不同的<code>HTTP</code>请求，应该传递的参数的名称是<code>HTTP_HOST</code>。</p>
+</blockquote>
+<p>如果你已经把<code>GET</code>参数写到了<code>URL</code>里，那你就不需要再传入一遍这些参数了。例如，上边的<code>GET</code>请求也可以写成：</p>
+<div class="codehilite"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'/customers/details/?name=fred&amp;age=7'</span><span class="p">)</span>
+</pre></div>
+
+
+<p>如果你把参数写到了<code>URL</code>里，同时也在<code>get</code>方法中传入了参数，那么传入的参数将覆盖掉<code>URL</code>中的参数。</p>
+<p>如果你将<strong>follow</strong>设置为<strong>True</strong>，测试客户端将追踪重定向，返回的响应对象的<strong>redirect_chain</strong>属性是一个元组，包含所有中间<code>URL</code>以及对应的状态码。</p>
+<p>比如，如果你发起请求访问<strong>/redirect_me/</strong>，这个链接重定向到<strong>/next/</strong>，再重定向到<strong>/final/</strong>，这个时候你就会看到：</p>
+<div class="codehilite"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">response</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'/redirect_me/'</span><span class="p">,</span> <span class="n">follow</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">response</span><span class="o">.</span><span class="n">redirect_chain</span>
+<span class="p">[(</span><span class="s">'http://testserver/next/'</span><span class="p">,</span> <span class="mi">302</span><span class="p">),</span> <span class="p">(</span><span class="s">'http://testserver/final/'</span><span class="p">,</span> <span class="mi">302</span><span class="p">)]</span>
+</pre></div>
+
+
+<p>如果你将<strong>secure</strong>设置为<strong>True</strong>，测试客户端会模拟<strong>HTTPS</strong>的请求。</p>
+<h4 id="postpath-datanone-content_typemultipart_content-followfalse-securefalse-extrasource"><code>post(path, data=None, content_type=MULTIPART_CONTENT, follow=False, secure=False, **extra)</code><a href="https://docs.djangoproject.com/en/1.9/_modules/django/test/client/#Client.post">[source]</a></h4>
+<p>发起一个指定<strong>path</strong>的<code>POST</code>请求，返回一个<strong>Response</strong>对象，有关该对象下边会详细说明。</p>
+<p>参数<strong>data</strong>是<code>POST</code>请求提交的数据，一般为键值对。例如：</p>
+<div class="codehilite"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">'/login/'</span><span class="p">,</span> <span class="p">{</span><span class="s">'name'</span><span class="p">:</span> <span class="s">'fred'</span><span class="p">,</span> <span class="s">'passwd'</span><span class="p">:</span> <span class="s">'secret'</span><span class="p">})</span>
+</pre></div>
+
+
+<p>这样发起的<code>POST</code>请求就等价于</p>
+<div class="codehilite"><pre>/login/
+</pre></div>
+
+
+<p>其中包含的<code>POST</code>数据为：</p>
+<div class="codehilite"><pre>name=fred&amp;passwd=secret
+</pre></div>
+
+
+<p>如果你在调用<code>post</code>方法时指定了<strong>content_type</strong>参数（比如<code>XML</code>对应的<code>text/xml</code>），那么你的发出去的<code>POST</code>请求报文就包含了数据和你指定的<strong>content_type</strong>请求头。</p>
+<p>如果你没有指定<strong>content_type</strong>参数，那么<strong>content_type</strong>将默认为<code>multipart/form-data</code>。在上边的例子里，<strong>data</strong>中的数据将被按照<code>multipart/form</code>的格式编码。</p>
+<p>有时需要提交一个单键多值的字典——比如指定<code>&lt;select multiple&gt;</code>的选项时，一个键会有多个值与之对应。举个栗子，<strong>choice</strong>键有三个值组成一个元组作为选项：</p>
+<div class="codehilite"><pre><span class="p">{</span><span class="s">'choices'</span><span class="p">:</span> <span class="p">(</span><span class="s">'a'</span><span class="p">,</span> <span class="s">'b'</span><span class="p">,</span> <span class="s">'d'</span><span class="p">)}</span>
+</pre></div>
+
+
+<p>提交文件是一种特殊的情况。需要<strong>POST</strong>一个文件时，你只需要用一个文件字段名作为键和一个指向你想上传的文件的指针作为对应的值。例如：</p>
+<div class="codehilite"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'wishlist.doc'</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+<span class="o">...</span>     <span class="n">c</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">'/customers/wishes/'</span><span class="p">,</span> <span class="p">{</span><span class="s">'name'</span><span class="p">:</span> <span class="s">'fred'</span><span class="p">,</span> <span class="s">'attachment'</span><span class="p">:</span> <span class="n">fp</span><span class="p">})</span>
+</pre></div>
+
+
+<p>（注意这里的键名<strong>attachment</strong>不是固定的，任意键名都是可以的。）</p>
+<p>与<code>get()</code>方法类似，你同样也可以通过提供一个文件指针来上传类文件对象（比如<a href="https://docs.python.org/3/library/io.html#io.StringIO"><strong>StringIO</strong></a>）或者<a href="https://docs.python.org/3/library/io.html#io.BytesIO"><strong>BytesIO</strong></a>。</p>
+<blockquote>
+<p><strong>Django 1.8 新特性</strong>
+使用类文件对象的功能已经添加。</p>
+</blockquote>
+<p>注意，假如你打算在多个<code>post()</code>方法中使用同一个文件指针，需要手动的在每次<strong>post</strong>之前手动重置这个文件指针。最简单的办法就是用上边代码展示的那样，在每次把文件指针传给<code>post()</code>之后，手动关闭掉这个文件流。</p>
+<p>你应当确保你的文件以一种能够被正常读出的方式打开。比如文件是一张图片，其中包含了二进制数据，这意味着你需要以<strong><code>rb</code></strong>(<code>read binary</code>)方式打开这个文件。</p>
+<p>其他参数的指定方法都类似<a href="https://docs.djangoproject.com/en/1.9/topics/testing/tools/#django.test.Client.get"><strong><code>Client.get()</code></strong></a>。</p>
+<p>如果你发起一个<code>URL</code>的<strong>POST</strong>请求，其中包含一些已经编码好的参数，这些参数将能够在<code>request.GET</code>字典中获取到。举个栗子，如果你发起了这样一个请求：</p>
+<div class="codehilite"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">'/login/?visitor=true'</span><span class="p">,</span> <span class="p">{</span><span class="s">'name'</span><span class="p">:</span> <span class="s">'fred'</span><span class="p">,</span> <span class="s">'passwd'</span><span class="p">:</span> <span class="s">'secret'</span><span class="p">})</span>
+</pre></div>
+
+
+<p>视图处理请求的时候能够根据<code>request.POST</code>获取用户名和密码，也能根据<code>request.GET</code>来确定当前用户是否是一个<code>visitor</code>。</p>
+<p>和<code>get()</code>方法一样，如果你将<strong>follow</strong>设置为<strong>True</strong>，测试客户端将追踪重定向，返回的响应对象的<strong>redirect_chain</strong>属性是一个元组，包含所有中间<code>URL</code>以及对应的状态码。</p>
+<p>如果你将<strong>secure</strong>设置为<strong>True</strong>，测试客户端会模拟<strong>HTTPS</strong>的请求。</p>
+<h4 id="headpath-datanone-followfalse-securefalse-extrasource"><code>head(path, data=None, follow=False, secure=False, **extra)</code><a href="https://docs.djangoproject.com/en/1.9/_modules/django/test/client/#Client.head">[source]</a></h4>
+<p>发起对<strong>path</strong>访问的<code>HEAD</code>请求然后返回一个<strong>Response</strong>对象。这个函数调用方法和<a href="https://docs.djangoproject.com/en/1.9/topics/testing/tools/#django.test.Client.get"><code>Client.get()</code></a>基本上一致，也包含了<strong>follow</strong>,<strong>secure</strong>,<strong>extra</strong>等参数，但是<code>HEAD</code>请求并不会给你返回一个消息体。</p>
+<h4 id="optionspath-data-content_typeapplicationoctet-stream-followfalse-securefalse-extrasource"><code>options(path, data='', content_type='application/octet-stream', follow=False, secure=False, **extra)</code><a href="https://docs.djangoproject.com/en/1.9/_modules/django/test/client/#Client.options">[source]</a></h4>
+<p>发起对<strong>path</strong>访问的<code>OPTIONS</code>请求然后返回一个<strong>Response</strong>对象。在<strong>RESTful</strong>接口中很常见的请求类型。</p>
+<p><strong>data</strong>参数的值会作为请求体发送，请求头中的<strong>Content-Type</strong>由参数<strong>content_type</strong>决定。</p>
+<p><strong>follow</strong>,<strong>secure</strong>,<strong>extra</strong>等参数的作用方式与<strong><code>Client.get()</code></strong>相同。</p>
+<h4 id="putpath-data-content_typeapplicationoctet-stream-followfalse-securefalse-extrasource"><code>put(path, data='', content_type='application/octet-stream', follow=False, secure=False, **extra)</code><a href="https://docs.djangoproject.com/en/1.9/_modules/django/test/client/#Client.put">[source]</a></h4>
+<p>发起对<strong>path</strong>访问的<code>PUT</code>请求然后返回一个<strong>Response</strong>对象。在<strong>RESTful</strong>接口中很常见的请求类型。</p>
+<p><strong>data</strong>参数的值会作为请求体发送，请求头中的<strong>Content-Type</strong>由参数<strong>content_type</strong>决定。</p>
+<p><strong>follow</strong>,<strong>secure</strong>,<strong>extra</strong>等参数的作用方式与<strong><code>Client.get()</code></strong>相同。</p>
+<h4 id="patchpath-data-content_typeapplicationoctet-stream-followfalse-securefalse-extrasource"><code>patch(path, data='', content_type='application/octet-stream', follow=False, secure=False, **extra)</code><a href="https://docs.djangoproject.com/en/1.9/_modules/django/test/client/#Client.patch">[source]</a></h4>
+<p>发起对<strong>path</strong>访问的<code>PATCH</code>请求然后返回一个<strong>Response</strong>对象。在<strong>RESTful</strong>接口中很常见的请求类型。</p>
+<p><strong>follow</strong>,<strong>secure</strong>,<strong>extra</strong>等参数的作用方式与<strong><code>Client.get()</code></strong>相同。</p>
+<h4 id="deletepath-data-content_typeapplicationoctet-stream-followfalse-securefalse-extrasource"><code>delete(path, data='', content_type='application/octet-stream', follow=False, secure=False, **extra)</code><a href="https://docs.djangoproject.com/en/1.9/_modules/django/test/client/#Client.delete">[source]</a></h4>
+<p>发起对<strong>path</strong>访问的<code>DELETE</code>请求然后返回一个<strong>Response</strong>对象。在<strong>RESTful</strong>接口中很常见的请求类型。</p>
+<p><strong>data</strong>参数的值会作为请求体发送，请求头中的<strong>Content-Type</strong>由参数<strong>content_type</strong>决定。</p>
+<p><strong>follow</strong>,<strong>secure</strong>,<strong>extra</strong>等参数的作用方式与<strong><code>Client.get()</code></strong>相同。</p>
+<h4 id="tracepath-followfalse-securefalse-extrasource"><code>trace(path, follow=False, secure=False, **extra)</code><a href="https://docs.djangoproject.com/en/1.9/_modules/django/test/client/#Client.trace">[source]</a></h4>
+<blockquote>
+<p><strong>Django 1.8的新特性</strong></p>
+</blockquote>
+<p>发起对<strong>path</strong>访问的<code>TRACE</code>请求然后返回一个<strong>Response</strong>对象。这个请求通常应用于模拟诊断探测。</p>
+<p>区别于其他的请求类型，根据<a href="https://tools.ietf.org/html/rfc2616.html"><code>RFC 2616</code></a>的约定，<strong>TRACE</strong>请求不应该包含实体，因此<code>trace()</code>方法并不提供<strong>data</strong>参数。</p>
+<p><strong>follow</strong>,<strong>secure</strong>,<strong>extra</strong>等参数的作用方式与<strong><code>Client.get()</code></strong>相同。</p>
+<h4 id="logincredentialssource"><code>login(**credentials)</code><a href="https://docs.djangoproject.com/en/1.9/_modules/django/test/client/#Client.login">[source]</a></h4>
+<p>如果你的网站使用了<code>Django</code>的<a href="https://docs.djangoproject.com/en/1.9/topics/auth/">认证系统</a>来处理用户登录，你可以使用测试客户端的<strong><code>login()</code></strong>方法去模拟用户登录的效果。</p>
+<p>由于这个方法和使用了<a href="https://docs.djangoproject.com/en/1.9/topics/auth/default/#django.contrib.auth.forms.AuthenticationForm"><strong><code>AuthenticationForm</code></strong></a>的<a href="https://docs.djangoproject.com/en/1.9/topics/auth/default/#django.contrib.auth.login"><strong><code>login()</code></strong></a>视图是等效的，因此没被激活的用户（<a href="https://docs.djangoproject.com/en/1.9/ref/contrib/auth/#django.contrib.auth.models.User.is_active"><code>is_active=False</code></a>）默认是没有权限登录的。</p>
+<p>在你调用了这个方法成功登录之后，测试客户端将利用必需的<code>cookies</code>和<code>session</code>的数据去通过那些基于用户登录信息的测试。</p>
+<p><strong>credentials</strong>参数的形式取决于你在配置文件中<a href="https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-AUTHENTICATION_BACKENDS"><strong><code>AUTHENTICATION_BACKENDS</code></strong></a>配置好的<a href="https://docs.djangoproject.com/en/1.9/topics/auth/customizing/#authentication-backends">认证后端</a>。如果你正在使用<code>Django</code>标准的认证后端（<strong>ModelBackend</strong>），<strong>credentials</strong>应当由用户的用户名和密码关键字组成。</p>
+<div class="codehilite"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">'fred'</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">'secret'</span><span class="p">)</span>
+
+<span class="c"># 现在你就可以访问已登录用户才能访问到的视图.</span>
+</pre></div>
+
+
+<p>如果你正在使用其他的认证后端，这个方法可能需要不同的<strong>credentials</strong>。它需要的参数和你使用的后端的<code>authenticate()</code>方法是一致的。</p>
+<p>如果<code>credentials</code>参数被接收而且认证通过，<code>login()</code>返回<code>True</code>。</p>
+<p>最后要提醒的是，你要确保在你调用这个方法之前已经创建了对应的用户。正如之前介绍的，测试程序执行的时候使用的是默认没有用户数据的测试用数据库。因此，生产站点上合法的用户在测试的时候是无法使用的。你需要在测试套件中先创建新用户——手动使用<code>Django</code>的<code>model</code>的<code>API</code>或者使用其他的测试工具。另外注意一点，如果你像让你的测试用户拥有一个密码，你不能通过密码属性值来设置用户密码，而是应该使用<a href="https://docs.djangoproject.com/en/1.9/ref/contrib/auth/#django.contrib.auth.models.User.set_password"><code>set_password()</code></a>方法去存储一个哈希加密过的正确过的密码。当然你也可以使用<a href="https://docs.djangoproject.com/en/1.9/ref/contrib/auth/#django.contrib.auth.models.UserManager.create_user"><code>create_user</code></a>方法去创建一个新用户。</p>
+<h4 id="force_loginuser-backendnonesource"><code>force_login(user, backend=None)</code><a href="https://docs.djangoproject.com/en/1.9/_modules/django/test/client/#Client.force_login">[source]</a></h4>
+<blockquote>
+<p><strong>Django 1.9 新特性</strong></p>
+</blockquote>
+<p>如果你的站点正在使用<code>Django</code>的<a href="https://docs.djangoproject.com/en/1.9/topics/auth/">认证系统</a>，你可以使用<code>force_login()</code>方法去模拟用户登录的效果。当用户登录的详细信息不重要时，可以考虑使用<strong><code>force_login()</code></strong>而不是 <a href="https://docs.djangoproject.com/en/1.9/topics/testing/tools/#django.test.Client.login"> <code>login()</code></a>。</p>
+<p>不同于<code>login()</code>的是，<code>force_login()</code>方法跳过了认证的过程：没被激活的用户(<a href="https://docs.djangoproject.com/en/1.9/ref/contrib/auth/#django.contrib.auth.models.User.is_active"><code>is_active=False</code></a>)也允许登录，而且用户的认证信息(<code>credentials</code>参数)也不需要提供。</p>
+<p>用户将拥有<strong>backend</strong>属性，由传入的参数<code>backend</code>决定（应当是一个<code>Python</code>的点路径字符串），或者当这个参数没有被传入时，由<strong>settings.AUTHENTICATION_BACKENDS[0]</strong>决定。由 <a href="https://docs.djangoproject.com/en/1.9/topics/testing/tools/#django.test.Client.login"> <code>login()</code></a>调用的<a href="https://docs.djangoproject.com/en/1.9/topics/auth/default/#django.contrib.auth.authenticate"><code>authenticate()</code></a>函数通常通过这个来标识用户。</p>
+<h4 id="logoutsource"><code>logout()</code><a href="https://docs.djangoproject.com/en/1.9/_modules/django/test/client/#Client.logout">[source]</a></h4>
+<p>如果你的站点正在使用<code>Django</code>的<a href="https://docs.djangoproject.com/en/1.9/topics/auth/">认证系统</a>，你可以使用<code>logout()</code>方法去模拟用户注销的效果。</p>
+<p>在你调用了这个方法之后，测试客户端会将所有的<code>cookies</code>和<code>session</code>数据还原到默认状态。随后的请求将来自一个<a href="https://docs.djangoproject.com/en/1.9/ref/contrib/auth/#django.contrib.auth.models.AnonymousUser">匿名用户</a>。</p>
+<hr/>
+<h3 id="_1_2_3">测试响应</h3></body></html>
+                </div>
+<hr/>
+<div style="float:left;">
+	上一篇: <a href="/djangozhong-bian-xie-he-zhi-xing-ce-shi.html" align='left'>
+	 Django中编写和执行测试
+	</a>
+</div>
+</p>
+                <div id="content-comments">
+                    <!-- 多说评论框 start -->
+                    <div class="ds-thread" data-thread-key="/djangoce-shi-gong-ju.html" data-title="Django测试工具" data-url="/djangoce-shi-gong-ju.html">
+                    </div>
+                    <!-- 多说评论框 end -->
+                    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+                    <script type="text/javascript">
+                        var duoshuoQuery = { short_name: 'xuweitao' };
+                        (function() {
+                            var ds = document.createElement('script');
+                            ds.type = 'text/javascript';ds.async = true;
+                            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+                            ds.charset = 'UTF-8';
+                            (document.getElementsByTagName('head')[0] 
+                             || document.getElementsByTagName('body')[0]).appendChild(ds);
+                        })();
+                    </script>
+                    <!-- 多说公共JS代码 end -->
+                </div>
+
+            </div>
+            <div class="niu2-right-container col-md-2">
+                <div id="niu2-sidebar-meta" class="niu2-sidebar">
+                    <div class="niu2-sidebar-label"><i class="icon-calendar"></i>发布时间:</div>
+                    <div class="niu2-sidebar-value">2016-03-23 09:42</div>
+                    <div class="niu2-sidebar-label"><i class="icon-open-folder"></i>分类:</div>
+                    <div class="niu2-sidebar-value"><a href="/category/fan-yi.html">翻译</a></div>
+                    <div class="niu2-sidebar-label"><i class="icon-tag"></i>标签:</div>
+                    <div class="niu2-sidebar-inter-value niu2-sidebar-tag"><a href="/tag/django.html">Django</a><sup>4</sup></div>
+                    <div class="niu2-sidebar-inter-value niu2-sidebar-tag"><a href="/tag/fan-yi.html">翻译</a><sup>3</sup></div>
+                </div>
+
+                <div id="niu2-sidebar-toc" class="niu2-sidebar" data-status="closed">
+                    <div class="niu2-sidebar-label">
+                        <i id="niu2-sidebar-toc-ctrl" class="icon-open-tocs"></i>目录
+                    </div>
+                    <ul id="niu2-sidebar-toc-list">
+                        <li><a href="#content-heading">Django测试工具</a></li>
+                        <li><a href='#'>测试客户端</a><ul><li><a href='#_1'>概述和一个简单的小例子</a></li><li><a href='#_1_2'>发起请求</a><ul><li><a href='#getpath-datanone-followfalse-securefalse-extrasource'>get(path, data=None, follow=False, secure=False, **extra)[source]</a></li><li><a href='#postpath-datanone-content_typemultipart_content-followfalse-securefalse-extrasource'>post(path, data=None, content_type=MULTIPART_CONTENT, follow=False, secure=False, **extra)[source]</a></li><li><a href='#headpath-datanone-followfalse-securefalse-extrasource'>head(path, data=None, follow=False, secure=False, **extra)[source]</a></li><li><a href='#optionspath-data-content_typeapplicationoctet-stream-followfalse-securefalse-extrasource'>options(path, data='', content_type='application/octet-stream', follow=False, secure=False, **extra)[source]</a></li><li><a href='#putpath-data-content_typeapplicationoctet-stream-followfalse-securefalse-extrasource'>put(path, data='', content_type='application/octet-stream', follow=False, secure=False, **extra)[source]</a></li><li><a href='#patchpath-data-content_typeapplicationoctet-stream-followfalse-securefalse-extrasource'>patch(path, data='', content_type='application/octet-stream', follow=False, secure=False, **extra)[source]</a></li><li><a href='#deletepath-data-content_typeapplicationoctet-stream-followfalse-securefalse-extrasource'>delete(path, data='', content_type='application/octet-stream', follow=False, secure=False, **extra)[source]</a></li><li><a href='#tracepath-followfalse-securefalse-extrasource'>trace(path, follow=False, secure=False, **extra)[source]</a></li><li><a href='#logincredentialssource'>login(**credentials)[source]</a></li><li><a href='#force_loginuser-backendnonesource'>force_login(user, backend=None)[source]</a></li><li><a href='#logoutsource'>logout()[source]</a></li></ul></li><li><a href='#_1_2_3'>测试响应</a></li></ul></li>
+                        <li><a href="#content-comments">评论</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="niu2-footer">
+            <div id="body-footer" class="col-md-6 col-md-offset-2">
+                <hr/>
+                <p>
+                    Powered by <a href="https://github.com/getpelican/pelican">Pelican</a>, 
+                    主题原版是<a href="https://github.com/mawenbao/niu-x2-sidebar">niu-x2-sidebar</a>,按个人喜好稍作更改。
+                </p>
+                <p>
+                    ©
+                            2015-2016
+                    <a class="niu2-footer-link" href="">徐维涛</a>
+                </p>
+                <p class="niu2-icons">
+                    <a class="niu2-footer-icon" href="mailto: xuweitao.py@hotmail.com" title="my email address">
+                        <i class="icon-envelop icon-lg"></i>
+                    </a>
+                    <a class="niu2-footer-icon" href="https://github.com/pyxuweitao" title="my github page">
+                        <i class="icon-github icon-lg"></i>
+                    </a>
+                </p>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            var _gaq=_gaq||[];
+            _gaq.push(["_setAccount","UA-72304978-1"]);
+            _gaq.push(["_trackPageview"]);
+            (function(){
+                var b=document.createElement("script");
+                b.type="text/javascript";
+                b.async=true;
+                b.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";
+                var a=document.getElementsByTagName("script")[0];
+                a.parentNode.insertBefore(b,a)
+            })();
+        </script>
+        <div id="niu2-pygments" data-theme="murphy"></div>
+        <script type="text/javascript" src="/theme/js/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" src="/theme/js/niu2.min.js"></script>
+        <script type="text/javascript" src="/theme/js/bootstrap.min.js"></script>
+        <script type="text/javascript">
+            onContentLoaded();
+        </script>
+    </body>
+</html>

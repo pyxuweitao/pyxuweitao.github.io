@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>在Django项目中进行测试 - 肉包子打狗</title>
+        <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+	<link rel="bookmark" type="image/x-icon" href="/bookmark.png">
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css" type="text/css" />
+        <link rel="stylesheet" href="/theme/font-icons/style.min.css" type="text/css" />
+        <link rel="stylesheet" href="/theme/css/niu2.min.css" type="text/css" />
+        <link rel="canonical" href="/zai-djangoxiang-mu-zhong-jin-xing-ce-shi.html" />
+        <link href='https://fonts.lug.ustc.edu.cn/css?family=Timmana|Kanit|Varela' rel='stylesheet' type='text/css'>
+        <link href="/theme/css/pagination.min.css" rel='stylesheet' type='text/css'>
+        <script type="text/javascript">window.onload=function(){};</script>
+        <!--[if lt IE 9]>
+            <script src="/theme/js/html5shiv.js"></script>
+            <script src="/theme/js/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="/theme/js/pagination.min.js"></script>
+    </head>
+    <body> 
+        <div id="body-header">
+            <div class="navbar navbar-default navbar-fixed-top">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" style="padding-left:0" href="/">
+                            <i class="icon-home"></i>肉包子打狗
+                        </a>
+                    </div>
+                    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+                        <ul class="nav navbar-nav">
+                            <li><a href="/about.html" target="_blank" title="about">
+                                <i class="icon-evil"></i>关于我</a>
+                            </li>
+                            <li><a href="/archives.html" title="archives">
+                                <i class="icon-drawer"></i>全部</a>
+                            </li>
+                            <li><a href="/tags.html" title="tags">
+                                <i class="icon-price-tags"></i>标签</a>
+                            </li>
+                            <li><a href="/links.html" title="links">
+                                <i class="icon-magnet"></i>友链</a>
+                            </li>
+                        <!-- category dropdown list -->
+                        <li class="dropdown">
+                           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="icon-folder-open"></i>分类<b class="caret"></b>
+                           </a>
+                           <ul class="dropdown-menu">
+                               <li><a href="/category/du-shu-bi-ji.html">
+                                   <i class="icon-folder-close"></i>读书笔记
+                                      (1)</a></li>
+                               <li><a href="/category/fan-yi.html">
+                                   <i class="icon-folder-close"></i>翻译
+                                      (3)</a></li>
+                               <li><a href="/category/oj.html">
+                                   <i class="icon-folder-close"></i>OJ
+                                      (1)</a></li>
+                               <li><a href="/category/qing-dan.html">
+                                   <i class="icon-folder-close"></i>清单
+                                      (1)</a></li>
+                               <li><a href="/category/webbackend.html">
+                                   <i class="icon-folder-close"></i>WebBackend
+                                      (1)</a></li>
+                           </ul>
+                        </li>
+                        <!--  self defined dropdown list -->
+                        </ul>
+                        
+                        <!-- right nav bar -->
+                        <ul class="nav navbar-nav navbar-right">
+                        <!-- google custom search -->
+                        <li>
+                        <div id="niu2-cse-wrapper">
+                            <div id="niu2-cse-header-box" class="navbar-form navbar-nav">
+                                <form action="http://google.com/cse">
+                                    <input type="hidden" name="cx" value="014853485295879752298:gff7fwfc9r4" />
+                                    <input type="hidden" name="ie" value="UTF-8" />
+                                    <div class="form-group">
+                                        <input id="niu2-cse-search-input" class="niu2-cse-header form-control" 
+                                            type="text" name="q" 
+                                            placeholder="回车一下，开始搜索"/>
+                                    </div>
+                                </form>
+                           </div>
+                           <div id="niu2-cse-ctrl-box" class="navbar-nav">
+                            <i id="niu2-cse-search-image" class="icon-search navbar-nav"></i><span id="niu2-cse-search-text">Google站内搜索</span>
+                           </div>
+                       </div>
+                       </li>
+                       </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <div id="body-content">
+            <div class="col-md-8 col-md-offset-2">
+                <h1 id="content-heading">在Django项目中进行测试</h1>
+            </div>
+            <div id="niu2-left-container" class="col-md-6 col-md-offset-2 with-right-border">
+                <div id="niu2-main-content">
+                    <html><head></head><body><hr/>
+<ul>
+<li>翻译人：徐维涛</li>
+<li>翻译周期：2016-03-01~2016-03-01</li>
+<li>中文译名：在Django项目中进行测试</li>
+<li>原标题和链接：<a href="https://docs.djangoproject.com/en/1.9/topics/testing/">Testing in Django</a></li>
+<li>说明：<code>Django1.9</code>官方文档翻译</li>
+<li>版权声明：未经本人许可，禁止转载发布</li>
+</ul>
+<hr/>
+<p>对现代<code>Web</code>开发者来说，自动化测试是一个非常有用的<code>bug-killing</code>工具。你可以使用一系列测试（也就是一个测试套件<code>test suite</code>）来解决或者避免代码中许多问题：</p>
+<ul>
+<li>当你在写新的代码时，你可以使用测试去验证你的代码是否按照你所想象的那样执行。</li>
+<li>当你在重构或者修改之前的代码时，你可以使用测试去确保你的修改不会影响到你的应用正常运行。</li>
+</ul>
+<p>对<code>Web</code>应用进行测试是一个复杂的工作，因为<code>Web</code>应用是由多层逻辑构成——从<code>HTTP</code>级的请求处理，到表单验证和解析，再到模板渲染。使用<code>Django</code>的测试执行框架和各式各样的辅助工具，你可以模拟客户端请求、插入测试数据、检验你应用的输出是否正确等，总之就是去核实你的代码在做它应该做的事情。</p>
+<p>最棒的地方是，在<code>Django</code>中进行测试真的很简单。</p>
+<p>在<code>Django</code>中编写测试，我们推荐使用<code>Python</code>标准库中内建的 <a href="https://docs.python.org/3/library/unittest.html#module-unittest"><strong>unittest</strong></a> 模块。如何使用它在 <strong><a href="https://docs.djangoproject.com/en/1.9/topics/testing/overview/">Django中编写和执行测试</a></strong> 文档中有详细说明。</p>
+<p>你也可以使用任何其他的<code>Python</code>测试框架，<code>Django</code>提供了一个<code>API</code>和一些工具来帮助你把其他测试框架集成到<code>Django</code>中。具体做法可以参考文档<strong><a href="https://docs.djangoproject.com/en/1.9/topics/testing/advanced/">Advanced testing topics</a></strong>中的<strong><a href="https://docs.djangoproject.com/en/1.9/topics/testing/advanced/#other-testing-frameworks">使用其他测试框架</a></strong>章节。</p>
+<hr/>
+<p>目录章节：</p>
+<ul>
+<li><a href="http://xuweitao.me/djangozhong-bian-xie-he-zhi-xing-ce-shi.html">Django中编写和执行测试</a></li>
+<li><a href="http://xuweitao.me/djangoce-shi-gong-ju-zhi-ce-shi-ke-hu-duan.html">测试工具 - 测试客户端</a></li>
+<li><a href="https://docs.djangoproject.com/en/1.9/topics/testing/advanced/">Advanced testing topics</a></li>
+</ul></body></html>
+                </div>
+                <div id="content-comments">
+                    <!-- 多说评论框 start -->
+                    <div class="ds-thread" data-thread-key="/zai-djangoxiang-mu-zhong-jin-xing-ce-shi.html" data-title="在Django项目中进行测试" data-url="/zai-djangoxiang-mu-zhong-jin-xing-ce-shi.html">
+                    </div>
+                    <!-- 多说评论框 end -->
+                    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+                    <script type="text/javascript">
+                        var duoshuoQuery = { short_name: 'xuweitao' };
+                        (function() {
+                            var ds = document.createElement('script');
+                            ds.type = 'text/javascript';ds.async = true;
+                            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+                            ds.charset = 'UTF-8';
+                            (document.getElementsByTagName('head')[0] 
+                             || document.getElementsByTagName('body')[0]).appendChild(ds);
+                        })();
+                    </script>
+                    <!-- 多说公共JS代码 end -->
+                </div>
+
+            </div>
+            <div class="niu2-right-container col-md-2">
+                <div id="niu2-sidebar-meta" class="niu2-sidebar">
+                    <div class="niu2-sidebar-label"><i class="icon-calendar"></i>发布时间:</div>
+                    <div class="niu2-sidebar-value">2016-03-01 23:02</div>
+                    <div class="niu2-sidebar-label"><i class="icon-open-folder"></i>分类:</div>
+                    <div class="niu2-sidebar-value"><a href="/category/fan-yi.html">翻译</a></div>
+                    <div class="niu2-sidebar-label"><i class="icon-tag"></i>标签:</div>
+                    <div class="niu2-sidebar-inter-value niu2-sidebar-tag"><a href="/tag/django.html">Django</a><sup>4</sup></div>
+                    <div class="niu2-sidebar-inter-value niu2-sidebar-tag"><a href="/tag/fan-yi.html">翻译</a><sup>3</sup></div>
+                </div>
+
+                <div id="niu2-sidebar-toc" class="niu2-sidebar" data-status="closed">
+                    <div class="niu2-sidebar-label">
+                        <i id="niu2-sidebar-toc-ctrl" class="icon-open-tocs"></i>目录
+                    </div>
+                    <ul id="niu2-sidebar-toc-list">
+                        <li><a href="#content-heading">在Django项目中进行测试</a></li>
+                        
+                        <li><a href="#content-comments">评论</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div id="niu2-toolbar">
+                <ul class="list-unstyled">
+                    <li><a id="niu2-toolbar-ctrlsidebar" href="#" title="隐藏侧边栏"><i class="icon-3x icon-hide-sidebar"></i></a></li>
+                    <li><a id="niu2-toolbar-revhistory" href="#" title="修订历史"><i class="icon-3x icon-clock-o"></i></a></li>
+                    <li><a id="niu2-toolbar-viewsource" href="#" title="查看源文件"><i class="icon-file-text-o" style="font-size:2.65em;margin-top:2px;"></i></a></li>
+                </ul>
+                <div id="niu2-toolbar-showsidebar" data-title="显示侧边栏"></div>
+                <div id="niu2-toolbar-github" data-repo="pyxuweitao/MSZ_YCL"></div>
+                <div id="niu2-toolbar-bitbucket" data-repo=""></div>
+            </div>
+        </div>
+
+        <div class="niu2-footer">
+            <div id="body-footer" class="col-md-6 col-md-offset-2">
+                <hr/>
+                <p>
+                    Powered by <a href="https://github.com/getpelican/pelican">Pelican</a>, 
+                    主题原版是<a href="https://github.com/mawenbao/niu-x2-sidebar">niu-x2-sidebar</a>,按个人喜好稍作更改。
+                </p>
+                <p>
+                    ©
+                            2015-2016
+                    <a class="niu2-footer-link" href="">徐维涛</a>
+                </p>
+                <p class="niu2-icons">
+                    <a class="niu2-footer-icon" href="mailto: xuweitao.py@hotmail.com" title="my email address">
+                        <i class="icon-envelop icon-lg"></i>
+                    </a>
+                    <a class="niu2-footer-icon" href="https://github.com/pyxuweitao" title="my github page">
+                        <i class="icon-github icon-lg"></i>
+                    </a>
+                </p>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            var _gaq=_gaq||[];
+            _gaq.push(["_setAccount","UA-72304978-1"]);
+            _gaq.push(["_trackPageview"]);
+            (function(){
+                var b=document.createElement("script");
+                b.type="text/javascript";
+                b.async=true;
+                b.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";
+                var a=document.getElementsByTagName("script")[0];
+                a.parentNode.insertBefore(b,a)
+            })();
+        </script>
+        <div id="niu2-pygments" data-theme="murphy"></div>
+        <script type="text/javascript" src="/theme/js/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" src="/theme/js/niu2.min.js"></script>
+        <script type="text/javascript" src="/theme/js/bootstrap.min.js"></script>
+        <script type="text/javascript">
+            onContentLoaded();
+        </script>
+    </body>
+</html>

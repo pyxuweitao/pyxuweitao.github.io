@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Django中编写和执行测试 - 肉包子打狗</title>
+        <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+	<link rel="bookmark" type="image/x-icon" href="/bookmark.png">
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css" type="text/css" />
+        <link rel="stylesheet" href="/theme/font-icons/style.min.css" type="text/css" />
+        <link rel="stylesheet" href="/theme/css/niu2.min.css" type="text/css" />
+        <link rel="canonical" href="/djangozhong-bian-xie-he-zhi-xing-ce-shi.html" />
+        <link href='https://fonts.lug.ustc.edu.cn/css?family=Timmana|Kanit|Varela' rel='stylesheet' type='text/css'>
+        <link href="/theme/css/pagination.min.css" rel='stylesheet' type='text/css'>
+        <script type="text/javascript">window.onload=function(){};</script>
+        <!--[if lt IE 9]>
+            <script src="/theme/js/html5shiv.js"></script>
+            <script src="/theme/js/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="/theme/js/pagination.min.js"></script>
+    </head>
+    <body> 
+        <div id="body-header">
+            <div class="navbar navbar-default navbar-fixed-top">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" style="padding-left:0" href="/">
+                            <i class="icon-home"></i>肉包子打狗
+                        </a>
+                    </div>
+                    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+                        <ul class="nav navbar-nav">
+                            <li><a href="/about.html" target="_blank" title="about">
+                                <i class="icon-evil"></i>关于我</a>
+                            </li>
+                            <li><a href="/archives.html" title="archives">
+                                <i class="icon-drawer"></i>全部</a>
+                            </li>
+                            <li><a href="/tags.html" title="tags">
+                                <i class="icon-price-tags"></i>标签</a>
+                            </li>
+                            <li><a href="/links.html" title="links">
+                                <i class="icon-magnet"></i>友链</a>
+                            </li>
+                        <!-- category dropdown list -->
+                        <li class="dropdown">
+                           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="icon-folder-open"></i>分类<b class="caret"></b>
+                           </a>
+                           <ul class="dropdown-menu">
+                               <li><a href="/category/du-shu-bi-ji.html">
+                                   <i class="icon-folder-close"></i>读书笔记
+                                      (1)</a></li>
+                               <li><a href="/category/fan-yi.html">
+                                   <i class="icon-folder-close"></i>翻译
+                                      (3)</a></li>
+                               <li><a href="/category/oj.html">
+                                   <i class="icon-folder-close"></i>OJ
+                                      (1)</a></li>
+                               <li><a href="/category/qing-dan.html">
+                                   <i class="icon-folder-close"></i>清单
+                                      (1)</a></li>
+                               <li><a href="/category/webbackend.html">
+                                   <i class="icon-folder-close"></i>WebBackend
+                                      (1)</a></li>
+                           </ul>
+                        </li>
+                        <!--  self defined dropdown list -->
+                        </ul>
+                        
+                        <!-- right nav bar -->
+                        <ul class="nav navbar-nav navbar-right">
+                        <!-- google custom search -->
+                        <li>
+                        <div id="niu2-cse-wrapper">
+                            <div id="niu2-cse-header-box" class="navbar-form navbar-nav">
+                                <form action="http://google.com/cse">
+                                    <input type="hidden" name="cx" value="014853485295879752298:gff7fwfc9r4" />
+                                    <input type="hidden" name="ie" value="UTF-8" />
+                                    <div class="form-group">
+                                        <input id="niu2-cse-search-input" class="niu2-cse-header form-control" 
+                                            type="text" name="q" 
+                                            placeholder="回车一下，开始搜索"/>
+                                    </div>
+                                </form>
+                           </div>
+                           <div id="niu2-cse-ctrl-box" class="navbar-nav">
+                            <i id="niu2-cse-search-image" class="icon-search navbar-nav"></i><span id="niu2-cse-search-text">Google站内搜索</span>
+                           </div>
+                       </div>
+                       </li>
+                       </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <div id="body-content">
+            <div class="col-md-8 col-md-offset-2">
+                <h1 id="content-heading">Django中编写和执行测试</h1>
+            </div>
+            <div id="niu2-left-container" class="col-md-6 col-md-offset-2 with-right-border">
+                <div id="niu2-main-content">
+                    <html><head></head><body><hr/>
+<ul>
+<li>翻译人：徐维涛</li>
+<li>翻译周期：2016-03-02~2016-03-09</li>
+<li>中文译名：Django中编写和执行测试</li>
+<li>原标题和链接：<a href="https://docs.djangoproject.com/en/1.9/topics/testing/overview/">Writing and running tests</a></li>
+<li>说明：<code>Django1.9</code>官方文档翻译，为保证翻译后语义通顺便于理解，在不影响把握原文所表中心的前提下，部分原文语句有省略、补充。翻译本文纯属兴趣爱好，不敢保证与原文所表100%一致，但必字句斟酌。能力有限，如有异译或觉不妥，欢迎交流。误导必致歉，查错必纠正。</li>
+<li>版权声明：未经本人许可，禁止转载发布</li>
+</ul>
+<hr/>
+<blockquote>
+<p>相关文档链接：</p>
+<ul>
+<li>
+<p><a href="https://docs.djangoproject.com/en/1.9/intro/tutorial05/">测试教程</a></p>
+</li>
+<li>
+<p><a href="https://docs.djangoproject.com/en/1.9/topics/testing/tools/">测试工具参考</a></p>
+</li>
+<li>
+<p><a href="https://docs.djangoproject.com/en/1.9/topics/testing/advanced/">进阶测试专题</a></p>
+</li>
+</ul>
+</blockquote>
+<p>这篇文档分为两个主要的章节。首先我们会介绍如何利用<code>Django</code>编写测试，然后再介绍怎样让测试跑起来。</p>
+<h2 id="">编写测试</h2>
+<p><code>Django</code>的单元测试使用的是<code>Python</code>的标准库模块：<a href="https://docs.python.org/3/library/unittest.html#module-unittest"><strong><code>unittest</code></strong></a>。这个模块定义了一些基于类的方法实现的测试。</p>
+<p>下面是一个继承了<a href="https://docs.djangoproject.com/en/1.9/topics/testing/tools/#django.test.TestCase"><code>django.test.TestCase</code></a>的例子。<a href="https://docs.djangoproject.com/en/1.9/topics/testing/tools/#django.test.TestCase"><code>django.test.TestCase</code></a>同时也是<a href="https://docs.python.org/3/library/unittest.html#unittest.TestCase"><code>unittest.TestCase</code></a>的子类，<a href="https://docs.djangoproject.com/en/1.9/topics/testing/tools/#django.test.TestCase"><code>django.test.TestCase</code></a>把每个测试在单独的事务中执行来实现没有依赖的测试。</p>
+<div class="codehilite"><pre><span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">TestCase</span>
+<span class="kn">from</span> <span class="nn">myapp.models</span> <span class="kn">import</span> <span class="n">Animal</span>
+
+<span class="k">class</span> <span class="nc">AnimalTestCase</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">Animal</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"lion"</span><span class="p">,</span> <span class="n">sound</span><span class="o">=</span><span class="s">"roar"</span><span class="p">)</span>
+        <span class="n">Animal</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"cat"</span><span class="p">,</span> <span class="n">sound</span><span class="o">=</span><span class="s">"meow"</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_animals_can_speak</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">"""Animals that can speak are correctly identified"""</span>
+        <span class="n">lion</span> <span class="o">=</span> <span class="n">Animal</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"lion"</span><span class="p">)</span>
+        <span class="n">cat</span> <span class="o">=</span> <span class="n">Animal</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"cat"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">lion</span><span class="o">.</span><span class="n">speak</span><span class="p">(),</span> <span class="s">'The lion says "roar"'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">cat</span><span class="o">.</span><span class="n">speak</span><span class="p">(),</span> <span class="s">'The cat says "meow"'</span><span class="p">)</span>
+</pre></div>
+
+
+<p>当你开始执行测试时，测试工具会默认的从所有文件名以<strong><code>test</code></strong>打头的文件中寻找所有的测试用例（即所有<a href="https://docs.python.org/3/library/unittest.html#unittest.TestCase"><code>unittest.TestCase</code></a>的子类），并自动根据那些测试用例创建一个测试套件，然后执行这个测试套件。</p>
+<p>想要知道更多有关<a href="https://docs.python.org/3/library/unittest.html#module-unittest"><code>unittest</code></a>的细节，请查看<code>Python</code>的文档。</p>
+<hr/>
+<blockquote>
+<p><strong>测试文件应该放在什么地方？</strong></p>
+<p>默认的<a href="https://docs.djangoproject.com/en/1.9/ref/django-admin/#django-admin-startapp"><code>starapp</code></a>命令模板会在新的应用中创建一个<code>tests.py</code>脚本。当你只需要数量不多的测试时，直接写在这个文件里没有问题。但是随着你的测试越来越多时，你很可能想去把它们放到一个<code>test package</code>中，这样你就可以将你的测试分离成多个子模块，比如<code>test_models.py</code>，<code>test_views.py</code>，<code>test_forms.py</code>等等。任性选择你喜欢的模块组织结构吧。</p>
+<p>另请参阅<a href="https://docs.djangoproject.com/en/1.9/topics/testing/advanced/#testing-reusable-applications">使用Django test runner去测试可重复利用的应用</a></p>
+</blockquote>
+<hr/>
+<blockquote>
+<p><strong>注意</strong>：</p>
+<p>如果你的测试依赖于数据库，比如创建或者查询<code>models</code>，请确保你的测试类继承了<a href="https://docs.djangoproject.com/en/1.9/topics/testing/tools/#django.test.TestCase"><code>django.test.TestCase</code></a>而不是<a href="https://docs.python.org/3/library/unittest.html#unittest.TestCase"><code>unittest.TestCase</code></a>。</p>
+<p>使用<a href="https://docs.python.org/3/library/unittest.html#unittest.TestCase"><code>unittest.TestCase</code></a>避免了每次在一个事务中执行一个测试的开销，并且也不会影响数据库，但是如果你的测试需要直接与数据库交互，测试的行为和结果将可能因为测试被执行的顺序而变得不同。这将导致的结果是：当单独执行一个个测试单元时测试通过，但是当执行一个测试套件时测试失败。</p>
+</blockquote>
+<hr/>
+<h2 id="_1">执行测试</h2>
+<p>当你写好了测试后，利用你项目中的<code>manage.py</code>工具脚本使用<a href="https://docs.djangoproject.com/en/1.9/ref/django-admin/#django-admin-test"><strong><code>test</code></strong></a>命令：</p>
+<div class="codehilite"><pre><span class="nv">$ </span>./manage.py <span class="nb">test</span>
+</pre></div>
+
+
+<p>对测试文件的识别是基于单元测试模块的内置的测试发现功能。默认情况下，这条命令将发现当前工作目录下所有以<code>test</code>开头的脚本文件中的测试代码。</p>
+<p>你可以通过新添任意数量的“测试标签”到<code>./manage.py test</code>命令之后去指定特定的测试运行。每一个测试标签可以是一个<code>Python</code>包、模块、测试用例子类或者测试方法以点分隔的全路径。例如：</p>
+<div class="codehilite"><pre><span class="c"># Run all the tests in the animals.tests module</span>
+<span class="nv">$ </span>./manage.py <span class="nb">test </span>animals.tests
+
+<span class="c"># Run all the tests found within the 'animals' package</span>
+<span class="nv">$ </span>./manage.py <span class="nb">test </span>animals
+
+<span class="c"># Run just one test case</span>
+<span class="nv">$ </span>./manage.py <span class="nb">test </span>animals.tests.AnimalTestCase
+
+<span class="c"># Run just one test method</span>
+<span class="nv">$ </span>./manage.py <span class="nb">test </span>animals.tests.AnimalTestCase.test_animals_can_speak
+</pre></div>
+
+
+<p>你也可以提供一个目录的路径去发现这个路径下的测试：</p>
+<div class="codehilite"><pre><span class="nv">$ </span>./manage.py <span class="nb">test </span>animals/
+</pre></div>
+
+
+<p>如果你的测试文件没被命名为<code>test*.py</code>模式的文件名，你可以通过<code>-p</code>选项（或者<code>--pattern</code>）来自定义一个文件模式匹配名来匹配测试文件。例如：</p>
+<div class="codehilite"><pre><span class="nv">$ </span>./manage.py <span class="nb">test</span> --pattern<span class="o">=</span><span class="s2">"tests_*.py"</span>
+</pre></div>
+
+
+<p>当测试正在运行的时候，如果你按下<code>Ctrl-C</code>，它会等待当前正在跑的测试单元执行完毕然后优雅的退出，同时会输出所有测试失败的有关细节信息，报告有多少个测试用例被执行，其中有多少个失败、多少个错误，然后照常清除掉测试用的数据库。有时候，有一些测试会意外的出错，你可能想在所有的测试都跑完前获取一些有关这些错误的细节，因此如果你忘记给测试命令加上<a href="https://docs.djangoproject.com/en/1.9/ref/django-admin/#cmdoption-test--failfast"><code>--failfast</code></a>选项的话，按下<code>Ctrl-C</code>非常有效。</p>
+<p>如果你不想等到当前正在跑的测试单元结束，你可以再按下一次<code>Ctrl-C</code>，然后测试会立即停止，但是这样很不优雅。所有在测试中断前的详细信息都不会被报告出来，而且所有由这次测试创建的数据库都不会被清除掉。</p>
+<blockquote>
+<p><strong>打开警告功能</strong></p>
+<p>在跑你的测试时，建议打开<code>Python</code>的警告功能：<code>python -Wall manage.py test</code>。这个<code>-Wall</code>标记告诉<code>Python</code>去显示一些警告消息。<code>Django</code>和<code>Python</code>很多其他的库一样，当一些功能方法已经不支持时，会使用警告去标记它们。它也可以标记出你代码中那些虽然严格来讲没有错，但是可以优化的地方。</p>
+</blockquote>
+<h3 id="_1_2">测试用数据库</h3>
+<p>当你的测试需要数据库支持时，换句话说，进行模型测试时，不会使用你真实的（生产）数据库，而是为测试新建一个全新的空的数据库（我在下文称之为<strong>测试用数据库</strong>）。</p>
+<p>无论测试通过与否，在测试正常执行完毕时，都会清除掉测试用数据库。</p>
+<blockquote>
+<p><strong><code>Django</code>1.8的新特性</strong></p>
+<p>你可以使用<a href="https://docs.djangoproject.com/en/1.9/ref/django-admin/#cmdoption-test--keepdb"><code>test --keepdb</code></a>选项来让测试用数据库不被清除。这将让测试用数据库一直保留。如果数据库不存在，它将首先被创建。此外，对测试用数据库的变动也会被及时更新。</p>
+</blockquote>
+<p>默认情况下，测试用数据库的名字会以配置文件中的<a href="https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-DATABASES"><strong>DATABASES</strong></a>中<a href="https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-NAME"><strong>NAME</strong></a>
+为基准，在它前边加上<code>test_</code>前缀。当在使用<strong>SQLite</strong>的时候，测试将默认使用内存数据库（也就是说，数据库将被在内存中创建，完全绕过文件系统）。在<a href="https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-DATABASES"><strong>DATABASES</strong></a>配置字典中，你可以添加一个<a href="https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-DATABASE-TEST"><strong><code>TEST</code></strong></a>字典来配置测试用数据库。举个栗子，如果你想使用不同于默认名的测试用数据库名，可以在<a href="https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-DATABASES"><strong>DATABASES</strong></a>中每个给出的数据库的<a href="https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-DATABASE-TEST"><strong><code>TEST</code></strong></a>字典中指定它们对应的数据库名<a href="https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-TEST_NAME"><strong>NAME</strong></a>。</p>
+<p>使用<strong>PostgreSQL</strong>时，数据库配置中的<a href="https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-USER"><strong>USER</strong></a>用户还需要<strong>postgres</strong>数据库的访问读权限。</p>
+<p>除了使用一个独立分离的数据库之外，测试数据库会同样使用你配置文件中所有数据库相关配置：<a href="https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-DATABASE-ENGINE"><strong>ENGINE</strong></a>，<a href="https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-USER"><strong>USER</strong></a>，<a href="https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-HOST"><strong>HOST</strong></a>等等。测试用数据库是由配置中的<a href="https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-USER"><strong>USER</strong></a>用户创建，因此你需要确保该用户有足够的权限在操作系统中创建一个新的数据库。</p>
+<p>如果你需要对数据库的编码进行细粒度的控制，可以在<strong><code>TEST</code></strong>配置字典中使用<a href="https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-TEST_CHARSET"><strong>CHARSET</strong></a>选项。如果你正在使用<strong>MySQL</strong>，你还可以使用<a href="https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-TEST_COLLATION"><strong>COLLATION</strong></a>选项去指定测试用数据库的排序规则。请参阅<a href="https://docs.djangoproject.com/en/1.9/ref/settings/"><strong>setting 文档</strong></a>获取更多进阶的配置的细节。</p>
+<p>如果将<strong>SQLite</strong>内存数据库（3.7.13+）和<code>Python</code>（3.4+）搭配使用，共享高速缓存<code>Cache</code>会被启用，也就是说你可以编写能够在线程间共享数据库的测试了。</p>
+<blockquote>
+<p><strong><code>Django</code>1.8的新特性</strong></p>
+<p>上边提到的有关<strong>SQLite</strong>共享高速缓存的功能已经实现。</p>
+</blockquote>
+<hr/>
+<blockquote>
+<p><strong>执行测试的时候需要生产数据库中的数据？</strong></p>
+<p>如果你的代码模块在被编译后试图去访问生产数据库，这将导致测试用数据库创建之前的一些潜在的意外的结果。举个栗子，如果你在模块级(<code>module-level</code>)的代码中写了一个在生产数据库的查询，并且数据库的确存在，生产数据可能破坏你的测试。无论如何我们都不推荐在你的代码中有类似的<code>import-time</code>数据库查询。</p>
+<p>这条原则同样适用于<a href="https://docs.djangoproject.com/en/1.9/ref/applications/#django.apps.AppConfig.ready"><code>ready()</code></a>的自定义实现。</p>
+<p><strong>另请参阅</strong></p>
+<p><a href="https://docs.djangoproject.com/en/1.9/topics/testing/advanced/#topics-testing-advanced-multidb">多数据库测试进阶</a></p>
+</blockquote>
+<hr/>
+<h3 id="_1_2_3">测试执行的顺序</h3>
+<p>为了确保所有的测试用例代码开始执行的时候都使用没有脏数据的数据库，<code>Django</code>按照以下原则来给测试重新排序：</p>
+<ul>
+<li>所有<a href="https://docs.djangoproject.com/en/1.9/topics/testing/tools/#django.test.TestCase"><strong>TestCase</strong></a>的子类首先执行</li>
+<li>然后，执行所有其他基于<code>Django</code>的测试（继承自<a href="https://docs.djangoproject.com/en/1.9/topics/testing/tools/#django.test.SimpleTestCase"><code>SimpleTestCase</code></a>或者<a href="https://docs.djangoproject.com/en/1.9/topics/testing/tools/#django.test.TransactionTestCase"><code>TransactionTestCase</code></a>的子类），但是执行的时候既不会保证也不会强制对它们进行排序。</li>
+<li>最后执行所有其他的继承自<a href="https://docs.python.org/3/library/unittest.html#unittest.TestCase"><code>unittest.TestCase</code></a>的测试（包括文档测试），这些测试可能会修改数据库但是并不会在测试结束后恢复数据库到测试之前的状态。</li>
+</ul>
+<blockquote>
+<p><strong>注解</strong></p>
+<p>测试执行的新顺序可以暴露出一些你想象不到的测试对于执行顺序的依赖。当存在依赖于数据库状态的<a href="https://docs.djangoproject.com/en/1.9/topics/testing/tools/#django.test.TransactionTestCase"><code>TransactionTestCase</code></a>类测试时，它们必须被及时更新以确保各个测试能够独立运行。</p>
+</blockquote>
+<hr/>
+<blockquote>
+<p><strong><code>Django</code>1.8的新特性</strong></p>
+<p>通过使用<code>test --reverse</code>选项，你可以倒序执行所有测试。这将帮助你确保你的测试之间是相互独立的。</p>
+</blockquote>
+<hr/>
+<h3 id="_1_2_3_4">仿真回滚</h3>
+<p>任何在<code>migrations</code>中加载的初始数据只有基于<code>TestCase</code>的测试可以获取，基于<code>TransactionTestCase</code>则不能获取，而且只在支持事务的后端上能够获取（<code>MyISAM</code>不支持事务处理）。对于那些继承了<code>TransactionTestCase</code>的测试类比如<a href="https://docs.djangoproject.com/en/1.9/topics/testing/tools/#django.test.LiveServerTestCase"><code>LiveServerTestCase</code></a>和<a href="https://docs.djangoproject.com/en/1.9/ref/contrib/staticfiles/#django.contrib.staticfiles.testing.StaticLiveServerTestCase"><code>StaticLiveServerTestCase</code></a>同样也适用于这条规则。</p>
+<p>通过在<code>TestCase</code>或者<code>TransactionTestCase</code>的子类定义体中设置<code>serialized_rollback</code>选项为<code>True</code>，<code>Django</code>就可以为每一个测试用例重新从数据库载入数据，但是请注意这将减慢测试套件三倍左右的运行速度。</p>
+<p>第三方应用或者那些依赖于<code>MyISAM</code>的开发将会需要设置上边提到的。但是一般情况下你使用的应该是支持事务的数据库而且大部分测试都继承<code>TestCase</code>，因此不需要这个设置。</p>
+<p>初始序列化通常很快，但是如果你希望序列化时排除掉某些应用，或者希望稍微加快点测试执行速度，你可能需要添加那些你想排除掉的应用到<a href="https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-TEST_NON_SERIALIZED_APPS"><strong><code>TEST_NON_SERIALIZED_APPS</code></strong></a>。</p>
+<p>为了防止序列化后的数据被重复加载，可以定义<code>serialized_rollback=True</code>来在数据库刷新的时候关闭<a href="https://docs.djangoproject.com/en/1.9/ref/signals/#django.db.models.signals.post_migrate"><code>post_migrate</code></a>信号。</p>
+<hr/>
+<h3 id="_1_2_3_4_5">其他测试情况</h3>
+<p>无论你的<code>settings</code>配置文件中<a href="https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-DEBUG"><strong><code>DEBUG</code></strong></a>变量的值是什么，所有<code>Django</code>的测试都按<a href="https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-DEBUG"><strong><code>DEBUG</code></strong></a>=<code>False</code>来执行。这是为了确保你的代码的输出能够和生产环境配置下的输出相匹配。</p>
+<p>每个测试执行结束后高速缓存<code>Cache</code>不会被清空，如果你在生产环境下执行<code>manage.py test fooapp</code>，可以把数据从测试代码中插入到正在跑的系统的高速缓存中，这一点和数据库不同，不会有单独的一个“测试用高速缓存”被创建。但是这个有可能在将来有所<a href="https://code.djangoproject.com/ticket/11505"><strong>改变</strong></a>。</p>
+<hr/>
+<h3 id="_1_2_3_4_5_6">读懂测试输出</h3>
+<p>当你执行你的测试时，你将看到大量的测试执行的准备信息。你可以通过命令选项<code>verbosity</code>去控制这些信息详细程度：</p>
+<div class="codehilite"><pre><span class="x">Creating test database...</span>
+<span class="x">Creating table myapp_animal</span>
+<span class="x">Creating table myapp_mineral</span>
+</pre></div>
+
+
+<p>上边是在告诉你测试当前正在创建一个测试用的数据库，就像上边的章节讲的那样。</p>
+<p>一旦测试用数据库创建完毕，<code>Django</code>将开始执行你的测试。如果所有的测试执行正常且全部通过，你将看到像这样的输出：</p>
+<div class="codehilite"><pre><span class="x">----------------------------------------------------------------------</span>
+<span class="x">Ran 22 tests in 0.221s</span>
+
+<span class="x">OK</span>
+</pre></div>
+
+
+<p>如果存在一些测试失败，你将看到有关失败的测试的全部的细节信息：</p>
+<div class="codehilite"><pre><span class="x">======================================================================</span>
+<span class="x">FAIL: test_was_published_recently_with_future_poll (polls.tests.PollMethodTests)</span>
+<span class="x">----------------------------------------------------------------------</span>
+<span class="x">Traceback (most recent call last):</span>
+<span class="x">  File "/dev/mysite/polls/tests.py", line 16, in test_was_published_recently_with_future_poll</span>
+<span class="x">    self.assertEqual(future_poll.was_published_recently(), False)</span>
+<span class="x">AssertionError: True != False</span>
+
+<span class="x">----------------------------------------------------------------------</span>
+<span class="x">Ran 1 test in 0.003s</span>
+
+<span class="x">FAILED (failures=1)</span>
+</pre></div>
+
+
+<p>有关这些错误输出的详细的说明已经超过这篇文档的范围，但是输出的信息其实很直观。你可以通过查阅<code>Python</code>的<a href="https://docs.python.org/3/library/unittest.html#module-unittest"><strong>unittest</strong></a>库的文档来获取更多详细信息。</p>
+<p>另外请注意，如果测试中出现失败的测试或者报错，测试脚本的返回代码是1。如果测试全部通过，返回代码是0。如果你在一个<code>shell</code>脚本中使用测试脚本，并且你需要在<code>shell</code>脚本中获取测试成功与否的信息，这个特性就非常有用了。</p>
+<hr/>
+<h3 id="_1_2_3_4_5_6_7">加速测试</h3>
+<p>在较新的<code>Django</code>版本中，默认的密码哈希被设计的相当缓慢。如果在你的测试中需要认证很多用户，你可以使用一个定制的<code>settings</code>文件，然后将<a href="https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-PASSWORD_HASHERS"><strong>PASSWORD_HASHERS</strong></a>配置上一个更快的哈希算法:</p>
+<div class="codehilite"><pre><span class="n">PASSWORD_HASHERS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s">'django.contrib.auth.hashers.MD5PasswordHasher'</span><span class="p">,</span>
+<span class="p">]</span>
+</pre></div>
+
+
+<p>最后，不要忘记添加<code>fixtures</code>中用到的相应的哈希算法到<a href="https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-PASSWORD_HASHERS"><strong>PASSWORD_HASHERS</strong></a>中，如果你用到<code>fixtures</code>的话。</p></body></html>
+                </div>
+<hr/>
+<div style="float:left;">
+	上一篇: <a href="/zai-djangoxiang-mu-zhong-jin-xing-ce-shi.html" align='left'>
+	 在Django项目中进行测试
+	</a>
+</div>
+<div style="float:right;">
+	下一篇: <a href="/djangoce-shi-gong-ju-zhi-ce-shi-ke-hu-duan.html" align='right'>
+	 Django测试工具 之 测试客户端
+	</a>
+</div>
+</p>
+                <div id="content-comments">
+                    <!-- 多说评论框 start -->
+                    <div class="ds-thread" data-thread-key="/djangozhong-bian-xie-he-zhi-xing-ce-shi.html" data-title="Django中编写和执行测试" data-url="/djangozhong-bian-xie-he-zhi-xing-ce-shi.html">
+                    </div>
+                    <!-- 多说评论框 end -->
+                    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+                    <script type="text/javascript">
+                        var duoshuoQuery = { short_name: 'xuweitao' };
+                        (function() {
+                            var ds = document.createElement('script');
+                            ds.type = 'text/javascript';ds.async = true;
+                            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+                            ds.charset = 'UTF-8';
+                            (document.getElementsByTagName('head')[0] 
+                             || document.getElementsByTagName('body')[0]).appendChild(ds);
+                        })();
+                    </script>
+                    <!-- 多说公共JS代码 end -->
+                </div>
+
+            </div>
+            <div class="niu2-right-container col-md-2">
+                <div id="niu2-sidebar-meta" class="niu2-sidebar">
+                    <div class="niu2-sidebar-label"><i class="icon-calendar"></i>发布时间:</div>
+                    <div class="niu2-sidebar-value">2016-03-09 23:41</div>
+                    <div class="niu2-sidebar-label"><i class="icon-open-folder"></i>分类:</div>
+                    <div class="niu2-sidebar-value"><a href="/category/fan-yi.html">翻译</a></div>
+                    <div class="niu2-sidebar-label"><i class="icon-tag"></i>标签:</div>
+                    <div class="niu2-sidebar-inter-value niu2-sidebar-tag"><a href="/tag/django.html">Django</a><sup>4</sup></div>
+                    <div class="niu2-sidebar-inter-value niu2-sidebar-tag"><a href="/tag/fan-yi.html">翻译</a><sup>3</sup></div>
+                </div>
+
+                <div id="niu2-sidebar-toc" class="niu2-sidebar" data-status="closed">
+                    <div class="niu2-sidebar-label">
+                        <i id="niu2-sidebar-toc-ctrl" class="icon-open-tocs"></i>目录
+                    </div>
+                    <ul id="niu2-sidebar-toc-list">
+                        <li><a href="#content-heading">Django中编写和执行测试</a></li>
+                        <li><a href='#'>编写测试</a></li><li><a href='#_1'>执行测试</a><ul><li><a href='#_1_2'>测试用数据库</a></li><li><a href='#_1_2_3'>测试执行的顺序</a></li><li><a href='#_1_2_3_4'>仿真回滚</a></li><li><a href='#_1_2_3_4_5'>其他测试情况</a></li><li><a href='#_1_2_3_4_5_6'>读懂测试输出</a></li><li><a href='#_1_2_3_4_5_6_7'>加速测试</a></li></ul></li>
+                        <li><a href="#content-comments">评论</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div id="niu2-toolbar">
+                <ul class="list-unstyled">
+                    <li><a id="niu2-toolbar-ctrlsidebar" href="#" title="隐藏侧边栏"><i class="icon-3x icon-hide-sidebar"></i></a></li>
+                    <li><a id="niu2-toolbar-revhistory" href="#" title="修订历史"><i class="icon-3x icon-clock-o"></i></a></li>
+                    <li><a id="niu2-toolbar-viewsource" href="#" title="查看源文件"><i class="icon-file-text-o" style="font-size:2.65em;margin-top:2px;"></i></a></li>
+                </ul>
+                <div id="niu2-toolbar-showsidebar" data-title="显示侧边栏"></div>
+                <div id="niu2-toolbar-github" data-repo="pyxuweitao/MSZ_YCL"></div>
+                <div id="niu2-toolbar-bitbucket" data-repo=""></div>
+            </div>
+        </div>
+
+        <div class="niu2-footer">
+            <div id="body-footer" class="col-md-6 col-md-offset-2">
+                <hr/>
+                <p>
+                    Powered by <a href="https://github.com/getpelican/pelican">Pelican</a>, 
+                    主题原版是<a href="https://github.com/mawenbao/niu-x2-sidebar">niu-x2-sidebar</a>,按个人喜好稍作更改。
+                </p>
+                <p>
+                    ©
+                            2015-2016
+                    <a class="niu2-footer-link" href="">徐维涛</a>
+                </p>
+                <p class="niu2-icons">
+                    <a class="niu2-footer-icon" href="mailto: xuweitao.py@hotmail.com" title="my email address">
+                        <i class="icon-envelop icon-lg"></i>
+                    </a>
+                    <a class="niu2-footer-icon" href="https://github.com/pyxuweitao" title="my github page">
+                        <i class="icon-github icon-lg"></i>
+                    </a>
+                </p>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            var _gaq=_gaq||[];
+            _gaq.push(["_setAccount","UA-72304978-1"]);
+            _gaq.push(["_trackPageview"]);
+            (function(){
+                var b=document.createElement("script");
+                b.type="text/javascript";
+                b.async=true;
+                b.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";
+                var a=document.getElementsByTagName("script")[0];
+                a.parentNode.insertBefore(b,a)
+            })();
+        </script>
+        <div id="niu2-pygments" data-theme="murphy"></div>
+        <script type="text/javascript" src="/theme/js/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" src="/theme/js/niu2.min.js"></script>
+        <script type="text/javascript" src="/theme/js/bootstrap.min.js"></script>
+        <script type="text/javascript">
+            onContentLoaded();
+        </script>
+    </body>
+</html>
