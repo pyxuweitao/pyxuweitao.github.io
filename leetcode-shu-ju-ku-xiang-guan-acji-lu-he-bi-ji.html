@@ -468,6 +468,72 @@ For example, after running your query, the above Person table should have the fo
     <span class="k">ON</span> <span class="n">c</span><span class="p">.</span><span class="n">DepartmentId</span> <span class="o">=</span> <span class="n">d</span><span class="p">.</span><span class="n">Id</span>
     <span class="k">GROUP</span> <span class="k">BY</span> <span class="n">d</span><span class="p">.</span><span class="n">Id</span> <span class="p">)</span> <span class="n">TEMP</span><span class="p">,</span> <span class="n">Employee</span> <span class="n">a</span><span class="p">,</span> <span class="n">Department</span> <span class="n">b</span>
 <span class="k">WHERE</span> <span class="n">TEMP</span><span class="p">.</span><span class="n">DepartmentId</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">Id</span> <span class="k">AND</span> <span class="n">a</span><span class="p">.</span><span class="n">Salary</span> <span class="o">=</span> <span class="n">TEMP</span><span class="p">.</span><span class="n">Salary</span> <span class="k">AND</span> <span class="n">a</span><span class="p">.</span><span class="n">DepartmentId</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">Id</span>
+</pre></div>
+
+
+<hr/>
+<h2 id="262-trips-and-users">262. Trips and Users</h2>
+<h3 id="question_1_2_3_4_5_6_7_8">Question</h3>
+<blockquote>
+<p>The Trips table holds all taxi trips. Each trip has a unique Id, while Client_Id and Driver_Id are both foreign keys to the Users_Id at the Users table. Status is an ENUM type of (‘completed’, ‘cancelled_by_driver’, ‘cancelled_by_client’).</p>
+</blockquote>
+<div class="codehilite"><pre><span class="o">+----+-----------+-----------+---------+--------------------+----------+</span>
+<span class="o">|</span> <span class="n">Id</span> <span class="o">|</span> <span class="n">Client_Id</span> <span class="o">|</span> <span class="n">Driver_Id</span> <span class="o">|</span> <span class="n">City_Id</span> <span class="o">|</span>        <span class="n">Status</span>      <span class="o">|</span><span class="n">Request_at</span><span class="o">|</span>
+<span class="o">+----+-----------+-----------+---------+--------------------+----------+</span>
+<span class="o">|</span> <span class="mi">1</span>  <span class="o">|</span>     <span class="mi">1</span>     <span class="o">|</span>    <span class="mi">10</span>     <span class="o">|</span>    <span class="mi">1</span>    <span class="o">|</span>     <span class="n">completed</span>      <span class="o">|</span><span class="mi">2013</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">01</span><span class="o">|</span>
+<span class="o">|</span> <span class="mi">2</span>  <span class="o">|</span>     <span class="mi">2</span>     <span class="o">|</span>    <span class="mi">11</span>     <span class="o">|</span>    <span class="mi">1</span>    <span class="o">|</span> <span class="n">cancelled_by_driver</span><span class="o">|</span><span class="mi">2013</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">01</span><span class="o">|</span>
+<span class="o">|</span> <span class="mi">3</span>  <span class="o">|</span>     <span class="mi">3</span>     <span class="o">|</span>    <span class="mi">12</span>     <span class="o">|</span>    <span class="mi">6</span>    <span class="o">|</span>     <span class="n">completed</span>      <span class="o">|</span><span class="mi">2013</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">01</span><span class="o">|</span>
+<span class="o">|</span> <span class="mi">4</span>  <span class="o">|</span>     <span class="mi">4</span>     <span class="o">|</span>    <span class="mi">13</span>     <span class="o">|</span>    <span class="mi">6</span>    <span class="o">|</span> <span class="n">cancelled_by_client</span><span class="o">|</span><span class="mi">2013</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">01</span><span class="o">|</span>
+<span class="o">|</span> <span class="mi">5</span>  <span class="o">|</span>     <span class="mi">1</span>     <span class="o">|</span>    <span class="mi">10</span>     <span class="o">|</span>    <span class="mi">1</span>    <span class="o">|</span>     <span class="n">completed</span>      <span class="o">|</span><span class="mi">2013</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">02</span><span class="o">|</span>
+<span class="o">|</span> <span class="mi">6</span>  <span class="o">|</span>     <span class="mi">2</span>     <span class="o">|</span>    <span class="mi">11</span>     <span class="o">|</span>    <span class="mi">6</span>    <span class="o">|</span>     <span class="n">completed</span>      <span class="o">|</span><span class="mi">2013</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">02</span><span class="o">|</span>
+<span class="o">|</span> <span class="mi">7</span>  <span class="o">|</span>     <span class="mi">3</span>     <span class="o">|</span>    <span class="mi">12</span>     <span class="o">|</span>    <span class="mi">6</span>    <span class="o">|</span>     <span class="n">completed</span>      <span class="o">|</span><span class="mi">2013</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">02</span><span class="o">|</span>
+<span class="o">|</span> <span class="mi">8</span>  <span class="o">|</span>     <span class="mi">2</span>     <span class="o">|</span>    <span class="mi">12</span>     <span class="o">|</span>    <span class="mi">12</span>   <span class="o">|</span>     <span class="n">completed</span>      <span class="o">|</span><span class="mi">2013</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">03</span><span class="o">|</span>
+<span class="o">|</span> <span class="mi">9</span>  <span class="o">|</span>     <span class="mi">3</span>     <span class="o">|</span>    <span class="mi">10</span>     <span class="o">|</span>    <span class="mi">12</span>   <span class="o">|</span>     <span class="n">completed</span>      <span class="o">|</span><span class="mi">2013</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">03</span><span class="o">|</span>
+<span class="o">|</span> <span class="mi">10</span> <span class="o">|</span>     <span class="mi">4</span>     <span class="o">|</span>    <span class="mi">13</span>     <span class="o">|</span>    <span class="mi">12</span>   <span class="o">|</span> <span class="n">cancelled_by_driver</span><span class="o">|</span><span class="mi">2013</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">03</span><span class="o">|</span>
+<span class="o">+----+-----------+-----------+---------+--------------------+----------+</span>
+</pre></div>
+
+
+<blockquote>
+<p>The Users table holds all users. Each user has an unique Users_Id, and Role is an ENUM type of (‘client’, ‘driver’, ‘partner’).</p>
+</blockquote>
+<div class="codehilite"><pre><span class="o">+----------+--------+--------+</span>
+<span class="o">|</span> <span class="n">Users_Id</span> <span class="o">|</span> <span class="n">Banned</span> <span class="o">|</span>  <span class="n">Role</span>  <span class="o">|</span>
+<span class="o">+----------+--------+--------+</span>
+<span class="o">|</span>    <span class="mi">1</span>     <span class="o">|</span>   <span class="n">No</span>   <span class="o">|</span> <span class="n">client</span> <span class="o">|</span>
+<span class="o">|</span>    <span class="mi">2</span>     <span class="o">|</span>   <span class="n">Yes</span>  <span class="o">|</span> <span class="n">client</span> <span class="o">|</span>
+<span class="o">|</span>    <span class="mi">3</span>     <span class="o">|</span>   <span class="n">No</span>   <span class="o">|</span> <span class="n">client</span> <span class="o">|</span>
+<span class="o">|</span>    <span class="mi">4</span>     <span class="o">|</span>   <span class="n">No</span>   <span class="o">|</span> <span class="n">client</span> <span class="o">|</span>
+<span class="o">|</span>    <span class="mi">10</span>    <span class="o">|</span>   <span class="n">No</span>   <span class="o">|</span> <span class="n">driver</span> <span class="o">|</span>
+<span class="o">|</span>    <span class="mi">11</span>    <span class="o">|</span>   <span class="n">No</span>   <span class="o">|</span> <span class="n">driver</span> <span class="o">|</span>
+<span class="o">|</span>    <span class="mi">12</span>    <span class="o">|</span>   <span class="n">No</span>   <span class="o">|</span> <span class="n">driver</span> <span class="o">|</span>
+<span class="o">|</span>    <span class="mi">13</span>    <span class="o">|</span>   <span class="n">No</span>   <span class="o">|</span> <span class="n">driver</span> <span class="o">|</span>
+<span class="o">+----------+--------+--------+</span>
+</pre></div>
+
+
+<blockquote>
+<p>Write a SQL query to find the cancellation rate of requests made by unbanned clients between Oct 1, 2013 and Oct 3, 2013. For the above tables, your SQL query should return the following rows with the cancellation rate being rounded to two decimal places.</p>
+</blockquote>
+<div class="codehilite"><pre><span class="o">+------------+-------------------+</span>
+<span class="o">|</span>     <span class="n">Day</span>    <span class="o">|</span> <span class="n">Cancellation</span> <span class="n">Rate</span> <span class="o">|</span>
+<span class="o">+------------+-------------------+</span>
+<span class="o">|</span> <span class="mi">2013</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">01</span> <span class="o">|</span>       <span class="mi">0</span><span class="p">.</span><span class="mi">33</span>        <span class="o">|</span>
+<span class="o">|</span> <span class="mi">2013</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">02</span> <span class="o">|</span>       <span class="mi">0</span><span class="p">.</span><span class="mi">00</span>        <span class="o">|</span>
+<span class="o">|</span> <span class="mi">2013</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">03</span> <span class="o">|</span>       <span class="mi">0</span><span class="p">.</span><span class="mi">50</span>        <span class="o">|</span>
+<span class="o">+------------+-------------------+</span>
+</pre></div>
+
+
+<h3 id="answer_1_2_3_4_5_6_7_8">Answer</h3>
+<div class="codehilite"><pre><span class="c1"># 236 ms over 64.02%</span>
+<span class="k">SELECT</span> <span class="n">Request_at</span> <span class="k">AS</span> <span class="n">Day</span><span class="p">,</span>
+       <span class="nf">ROUND</span><span class="p">(</span><span class="nf">SUM</span><span class="p">(</span><span class="k">CASE</span> <span class="k">WHEN</span> <span class="n">a</span><span class="p">.</span><span class="n">Status</span> <span class="o">&lt;&gt;</span> <span class="s1">'completed'</span> <span class="k">THEN</span> <span class="mi">1</span> <span class="k">ELSE</span> <span class="mi">0</span> <span class="n">END</span><span class="p">)</span><span class="o">/</span><span class="nf">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span> <span class="k">AS</span> <span class="s2">"Cancellation Rate"</span>
+<span class="k">FROM</span> <span class="n">Trips</span> <span class="n">a</span><span class="p">,</span> <span class="n">Users</span> <span class="n">b</span>
+<span class="k">WHERE</span> <span class="p">(</span><span class="n">Request_at</span> <span class="k">BETWEEN</span> <span class="s1">'2013-10-01'</span> <span class="k">AND</span> <span class="s1">'2013-10-03'</span><span class="p">)</span>
+<span class="k">AND</span> <span class="n">a</span><span class="p">.</span><span class="n">Client_Id</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">Users_Id</span>
+<span class="k">AND</span> <span class="n">b</span><span class="p">.</span><span class="n">Banned</span> <span class="o">=</span> <span class="s1">'No'</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="n">Request_at</span>
 </pre></div></body></html>
                 </div>
                 <div id="content-comments">
@@ -508,7 +574,7 @@ For example, after running your query, the above Person table should have the fo
                     </div>
                     <ul id="niu2-sidebar-toc-list">
                         <li><a href="#content-heading">Leetcode 数据库相关AC记录和笔记</a></li>
-                        <li><a href='#176-second-highest-salary'>176. Second Highest Salary</a><ul><li><a href='#question'>Question</a></li><li><a href='#answer'>Answer</a></li></ul></li><li><a href='#178-rank-scores'>178. Rank Scores</a><ul><li><a href='#question_1'>Question</a></li><li><a href='#answer_1'>Answer</a></li></ul></li><li><a href='#180-consecutive-numbers'>180. Consecutive Numbers</a><ul><li><a href='#question_1_2'>Question</a></li><li><a href='#answer_1_2'>Answer</a></li></ul></li><li><a href='#182-duplicate-emails'>182. Duplicate Emails</a><ul><li><a href='#question_1_2_3'>Question</a></li><li><a href='#answer_1_2_3'>Answer</a></li></ul></li><li><a href='#183-customers-who-never-order'>183. Customers Who Never Order</a><ul><li><a href='#question_1_2_3_4'>Question</a></li><li><a href='#answer_1_2_3_4'>Answer</a></li></ul></li><li><a href='#196-delete-duplicate-emails'>196. Delete Duplicate Emails</a><ul><li><a href='#question_1_2_3_4_5'>Question</a></li><li><a href='#answer_1_2_3_4_5'>Answer</a></li></ul></li><li><a href='#197-rising-temperature'>197. Rising Temperature</a><ul><li><a href='#question_1_2_3_4_5_6'>Question</a></li><li><a href='#answer_1_2_3_4_5_6'>Answer</a></li></ul></li><li><a href='#184-department-highest-salary'>184. Department Highest Salary</a><ul><li><a href='#question_1_2_3_4_5_6_7'>Question</a></li><li><a href='#answer_1_2_3_4_5_6_7'>Answer</a></li></ul></li>
+                        <li><a href='#176-second-highest-salary'>176. Second Highest Salary</a><ul><li><a href='#question'>Question</a></li><li><a href='#answer'>Answer</a></li></ul></li><li><a href='#178-rank-scores'>178. Rank Scores</a><ul><li><a href='#question_1'>Question</a></li><li><a href='#answer_1'>Answer</a></li></ul></li><li><a href='#180-consecutive-numbers'>180. Consecutive Numbers</a><ul><li><a href='#question_1_2'>Question</a></li><li><a href='#answer_1_2'>Answer</a></li></ul></li><li><a href='#182-duplicate-emails'>182. Duplicate Emails</a><ul><li><a href='#question_1_2_3'>Question</a></li><li><a href='#answer_1_2_3'>Answer</a></li></ul></li><li><a href='#183-customers-who-never-order'>183. Customers Who Never Order</a><ul><li><a href='#question_1_2_3_4'>Question</a></li><li><a href='#answer_1_2_3_4'>Answer</a></li></ul></li><li><a href='#196-delete-duplicate-emails'>196. Delete Duplicate Emails</a><ul><li><a href='#question_1_2_3_4_5'>Question</a></li><li><a href='#answer_1_2_3_4_5'>Answer</a></li></ul></li><li><a href='#197-rising-temperature'>197. Rising Temperature</a><ul><li><a href='#question_1_2_3_4_5_6'>Question</a></li><li><a href='#answer_1_2_3_4_5_6'>Answer</a></li></ul></li><li><a href='#184-department-highest-salary'>184. Department Highest Salary</a><ul><li><a href='#question_1_2_3_4_5_6_7'>Question</a></li><li><a href='#answer_1_2_3_4_5_6_7'>Answer</a></li></ul></li><li><a href='#262-trips-and-users'>262. Trips and Users</a><ul><li><a href='#question_1_2_3_4_5_6_7_8'>Question</a></li><li><a href='#answer_1_2_3_4_5_6_7_8'>Answer</a></li></ul></li>
                         <li><a href="#content-comments">评论</a></li>
                     </ul>
                 </div>
