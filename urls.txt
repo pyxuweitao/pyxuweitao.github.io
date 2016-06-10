@@ -2,6 +2,7 @@ http://xuweitao.me/
 http://xuweitao.me/archives.html
 http://xuweitao.me/tags.html
 http://xuweitao.me/categories.html
+http://xuweitao.me/wo-hui-lai-liao.html
 http://xuweitao.me/leetcode-shu-ju-ku-xiang-guan-acji-lu-he-bi-ji.html
 http://xuweitao.me/2016nian-mu-biao-qing-dan.html
 http://xuweitao.me/djangoce-shi-gong-ju-zhi-ce-shi-ke-hu-duan.html
@@ -14,12 +15,14 @@ http://xuweitao.me/category/fan-yi.html
 http://xuweitao.me/category/oj.html
 http://xuweitao.me/category/qing-dan.html
 http://xuweitao.me/category/webbackend.html
+http://xuweitao.me/category/zhuang-tai.html
 http://xuweitao.me/tag/database.html
-http://xuweitao.me/tag/fan-yi.html
 http://xuweitao.me/tag/du-shu-bi-ji.html
+http://xuweitao.me/tag/fan-yi.html
 http://xuweitao.me/tag/django.html
 http://xuweitao.me/tag/mu-biao-qing-dan.html
 http://xuweitao.me/tag/nginx.html
 http://xuweitao.me/tag/dai-ma.html
 http://xuweitao.me/tag/leetcode.html
+http://xuweitao.me/tag/za-tan.html
 http://xuweitao.me/author/xu-wei-tao.html
